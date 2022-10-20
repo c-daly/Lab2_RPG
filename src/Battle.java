@@ -10,8 +10,8 @@ public class Battle {
     private Player player2;
     private List<IGear> gear;
 
-    Comparator<IGear> attackComparator = (gear1, gear2) -> ((Integer) gear1.getAttackModifier()).compareTo((Integer) gear2.getAttackModifier());
-    Comparator<IGear> defenseComparator = (gear1, gear2) -> ((Integer) gear1.getDefenseModifier()).compareTo((Integer) gear2.getDefenseModifier());
+    private Comparator<IGear> attackComparator = (gear1, gear2) -> ((Integer) gear1.getAttackModifier()).compareTo((Integer) gear2.getAttackModifier());
+    private Comparator<IGear> defenseComparator = (gear1, gear2) -> ((Integer) gear1.getDefenseModifier()).compareTo((Integer) gear2.getDefenseModifier());
     public Battle(Player player1, Player player2, List<IGear> gear) {
         this.player1 = player1;
         this.player2 = player2;
@@ -30,8 +30,14 @@ public class Battle {
     private void processTurn() {
         if (gearRemaining()) {
             player1.equipGear(player1.chooseGear(gear));
-            player2.equipGear(player1.chooseGear(gear));
+            // Did player1 take the last item?
+            if (gearRemaining()) {
+                player2.equipGear(player1.chooseGear(gear));
+            }
+            // our work here is done
+            return;
         } else {
+            // Gear is gone, let's add it all up
             declareWinner();
         }
     }
@@ -48,8 +54,7 @@ public class Battle {
                 comparator = attackComparator;
             case "defense":
                 comparator = defenseComparator;
-
-            return gear.stream().sorted(comparator).toList();
         }
+        return gear.stream().sorted(comparator).toList();
     }
 }

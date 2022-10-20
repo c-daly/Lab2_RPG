@@ -8,7 +8,7 @@ public class HandGear extends AbstractGear {
         super(attack, defense, adjective, noun);
     }
     @Override
-    public IGear combine(IGear otherGear) {
+    public IGear combine(IGear otherGear) throws Exception {
         return new HandGear(getAttackModifier(), getDefenseModifier(), otherGear.getAdjective(), getNoun());
     }
 }

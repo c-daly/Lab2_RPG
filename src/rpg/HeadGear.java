@@ -10,7 +10,7 @@ public class HeadGear extends AbstractGear {
     }
 
     @Override
-    public IGear combine(IGear otherGear) {
+    public IGear combine(IGear otherGear) throws Exception {
 
         boolean sameTypes = otherGear instanceof HeadGear;
         if (!sameTypes) {

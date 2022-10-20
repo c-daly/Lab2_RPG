@@ -18,7 +18,7 @@ public abstract class AbstractGear implements IGear {
         this.adjective = adjective;
         this.noun = noun;
     }
-    public abstract IGear combine(IGear otherGear);
+    public abstract IGear combine(IGear otherGear) throws Exception;
 
     public int getAttackModifier() {
         return attackModifier;
