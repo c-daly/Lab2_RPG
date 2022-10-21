@@ -1,3 +1,4 @@
+import rpg.Battle;
 import rpg.Player;
 import rpg.interfaces.IGear;
 
