@@ -1,4 +1,5 @@
-import rpg.Player;
+package rpg;
+
 import rpg.interfaces.IGear;
 
 import java.util.Comparator;
@@ -7,7 +8,7 @@ import java.util.List;
 public class Battle {
     private final Player player1;
     private final Player player2;
-    private final List<IGear> gear;
+    private final List<rpg.interfaces.IGear> gear;
 
     public Battle(Player player1, Player player2, List<IGear> gear) {
         this.player1 = player1;

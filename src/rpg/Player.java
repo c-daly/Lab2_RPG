@@ -1,5 +1,6 @@
 package rpg;
 
+
 import rpg.interfaces.IGear;
 
 import java.util.List;
