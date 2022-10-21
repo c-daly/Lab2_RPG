@@ -18,7 +18,10 @@ public class Player {
     private List<IGear> footwear;
     private List<IGear> handGear;
 
-    public Player(int attack, int defense) {
+    public Player(int attack, int defense) throws IllegalArgumentException {
+        if (attack < 0 || defense < 0) {
+            throw new IllegalArgumentException("Negative ints");
+        }
         attackValue = attack;
         defenseValue = defense;
     }
@@ -39,12 +42,8 @@ public class Player {
         return defenseModifier;
     }
 
-    public IGear chooseGear(List<IGear> gear) {
-        try {
-            equipGear(gear.get(0));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public IGear chooseGear(List<IGear> gear) throws Exception {
+        equipGear(gear.get(0));
         return gear.get(0);
     }
 
