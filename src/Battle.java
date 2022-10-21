@@ -5,56 +5,64 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Battle {
-    private final int MAX_TURNS = 10;
-    private Player player1;
-    private Player player2;
-    private List<IGear> gear;
+    private final Player player1;
+    private final Player player2;
+    private final List<IGear> gear;
 
-    private Comparator<IGear> attackComparator = (gear1, gear2) -> ((Integer) gear1.getAttackModifier()).compareTo((Integer) gear2.getAttackModifier());
-    private Comparator<IGear> defenseComparator = (gear1, gear2) -> ((Integer) gear1.getDefenseModifier()).compareTo((Integer) gear2.getDefenseModifier());
     public Battle(Player player1, Player player2, List<IGear> gear) {
         this.player1 = player1;
         this.player2 = player2;
         // Empty gear list is ok, winner will just be based on natural stats
         this.gear = gear;
     }
+
     public void runBattle() {
         int turn = 0;
 
-        while (turn <= MAX_TURNS) {
+        while (gear.size() > 0) {
             processTurn();
-            turn++;
         }
+        finalizeGame();
+    }
+
+    private void finalizeGame() {
+        printBattleStatus();
+        declareWinner();
     }
 
     private void processTurn() {
+        printBattleStatus();
+        IGear gearChosen1 = player1.chooseGear(gear);
+        gear.remove(gearChosen1);
+        // Did player1 take the last item?
         if (gearRemaining()) {
-            player1.equipGear(player1.chooseGear(gear));
-            // Did player1 take the last item?
-            if (gearRemaining()) {
-                player2.equipGear(player1.chooseGear(gear));
-            }
-            // our work here is done
-            return;
-        } else {
-            // Gear is gone, let's add it all up
-            declareWinner();
+            IGear gearChosen2 = player2.chooseGear(gear);
+            gear.remove(gearChosen2);
         }
     }
 
+    private List<IGear> sortBy(String sortField) throws Exception {
+        // TODO: This needs to be cleaned up
+        Comparator<IGear> comparator = IGear.attackComparator;
+        switch (sortField.toLowerCase()) {
+            case "attack":
+                comparator = IGear.attackComparator;
+            case "defense":
+                comparator = IGear.defenseComparator;
+        }
+        return gear.stream().sorted(comparator).toList();
+    }
+
+    private void printBattleStatus() {
+        player1.printPlayerStatus();
+        player2.printPlayerStatus();
+    }
     private boolean gearRemaining() {
         return (!gear.isEmpty());
     }
 
-    private void declareWinner() {}
-    private List<IGear> sortBy(String sortField) throws Exception {
-        Comparator comparator = attackComparator;
-        switch(sortField.toLowerCase()) {
-            case "attack":
-                comparator = attackComparator;
-            case "defense":
-                comparator = defenseComparator;
-        }
-        return gear.stream().sorted(comparator).toList();
+    private void declareWinner() {
+        System.out.println("There was a winner!");
     }
+
 }

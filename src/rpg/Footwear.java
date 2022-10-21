@@ -10,7 +10,10 @@ public class Footwear extends AbstractGear {
     }
 
     @Override
-    public IGear combine(IGear otherGear)  throws Exception {
-        return new Footwear(getAttackModifier(), getDefenseModifier(), otherGear.getAdjective(), getNoun());
+    public IGear combine(IGear otherGear) throws Exception {
+        return new Footwear(getAttackModifier(),
+                getDefenseModifier(),
+                otherGear.getAdjective(),
+                getNoun());
     }
 }

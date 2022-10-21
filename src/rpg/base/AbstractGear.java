@@ -2,11 +2,15 @@ package rpg.base;
 
 import rpg.interfaces.IGear;
 
+/**
+ *
+ */
 public abstract class AbstractGear implements IGear {
-    private int attackModifier;
-    private int defenseModifier;
-    private String adjective;
-    private String noun;
+
+    private final int attackModifier;
+    private final int defenseModifier;
+    private final String adjective;
+    private final String noun;
 
     public AbstractGear(int attack, int defense, String adjective, String noun)
     {
@@ -18,8 +22,17 @@ public abstract class AbstractGear implements IGear {
         this.adjective = adjective;
         this.noun = noun;
     }
+
+    /**
+     * @param otherGear
+     * @return
+     * @throws Exception
+     */
     public abstract IGear combine(IGear otherGear) throws Exception;
 
+    /**
+     * @return
+     */
     public int getAttackModifier() {
         return attackModifier;
     }
