@@ -38,4 +38,8 @@ public class PlayerTest {
     @Test
     public void printPlayerStatus() {
     }
+
+    @Test
+    public void getPlayerDescription() {
+    }
 }

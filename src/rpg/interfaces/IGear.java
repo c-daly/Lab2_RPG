@@ -12,5 +12,5 @@ public interface IGear {
     String getAdjective();
     String getNoun();
 
-    IGear combine(IGear other) throws Exception;
+    IGear combine(IGear other) throws IllegalArgumentException;
 }
