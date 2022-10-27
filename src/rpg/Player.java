@@ -4,7 +4,6 @@ package rpg;
 import rpg.interfaces.IGear;
 
 import javax.lang.model.type.UnknownTypeException;
-import javax.management.RuntimeErrorException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -74,54 +73,54 @@ public class Player {
             throw new IllegalArgumentException("Gear argument must not be null.");
         }
 
-        // sort gear by attack value
-        // select all gear matching highest attack value
-        // select all the gear for which there is room in inventory
-        // if more than one has the high attack value, take the one with the highest defense
-        // if more than one ties on defense, select randomly
-        List<IGear> attackGear = gear.stream().sorted(IGear.attackComparator).toList();
+        // First we'll look through the gear sorted by attack order.
+        // If the current item can be equipped without combining, we'll use it.
+        // if not, keep going through the gear list.
+       List<IGear> attackGear = gear.stream().sorted(IGear.attackComparator).toList();
         List<IGear> potentialAttackItems = new ArrayList<>();
         int highestAttack = 0;
         for (IGear item : attackGear) {
-            if (item.getAttackModifier() < highestAttack) {
-                // this is a sorted list, so we've passed all items with the highest attack value
-                if (potentialAttackItems.size() == 1) {
-                    // we've only got one item so we can return it
-                    return potentialAttackItems.get(0);
+            if (confirmRoomForGearType(item)) {
+                if (item.getAttackModifier() < highestAttack) {
+                    // this is a sorted list, so we've passed all items with the highest attack value
+                    if (potentialAttackItems.size() == 1) {
+                        // we've only got one item so we can return it
+                        return potentialAttackItems.get(0);
+                    }
                 } else {
-                    // we have more than one item; we'll have to look at defense
-                    break;
+                    // We must have a high attack value.  Add it to the list.
+                    potentialAttackItems.add(item);
                 }
-            } else {
-                potentialAttackItems.add(item);
             }
         }
 
-        List<IGear> defenseGear = potentialAttackItems.stream().sorted(IGear.defenseComparator).toList();
+        List<IGear> defenseGear = gear.stream().sorted(IGear.defenseComparator).toList();
         List<IGear> potentialDefenseItems = new ArrayList<>();
         int highestDefense = 0;
-        for(IGear item : defenseGear) {
-            // if this value is lower, it's because we've already passed through the max value
-            // and we're no longer interested in the other pieces of gear
-            if(item.getDefenseModifier() < highestDefense) {
-                // we only have one candidate, so let's return it
-               if(potentialDefenseItems.size() == 1) {
-                   return potentialDefenseItems.get(0);
-               } else {
-                   // We have multiple elements with the highest defense value
-                   // so we'll send a random one back
-                   Random rand = new Random();
-                   int randInt = rand.nextInt(potentialDefenseItems.size());
-                   return potentialDefenseItems.get(randInt);
-               }
-            } else {
-                // This is a higher defense value, so let's add it
-                potentialDefenseItems.add(item);
+
+        // We're going to do the same thing for defense
+        for (IGear item : defenseGear) {
+            // check we can wear this item without combining.
+            if (confirmRoomForGearType(item)) {
+                // if this value is lower, it's because we've already passed through the max value
+                // and we're no longer interested in the other pieces of gear
+                if (item.getDefenseModifier() < highestDefense) {
+                    // we only have one candidate, so let's return it
+                    if (potentialDefenseItems.size() == 1) {
+                        return potentialDefenseItems.get(0);
+                    }
+                } else {
+                    // This is a higher defense value, so let's add it
+                    potentialDefenseItems.add(item);
+                }
             }
         }
-        // shouldn't get here
-        // throwing vanilla Exception, rather than custom
-        throw new Exception("Choose gear loop unexpectedly completed without returning gear");
+
+        // We couldn't find a free spot for any gear
+        // so we're returning a random item.
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(gear.size());
+        return gear.get(randomIndex);
     }
 
     /**

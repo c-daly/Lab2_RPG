@@ -23,6 +23,9 @@ public class HeadGear extends AbstractGear {
         if (!sameTypeAs(otherGear)) {
             throw new IllegalArgumentException("Gear must be of same type to combine");
         }
-        return new HeadGear(getAttackModifier(), getDefenseModifier(), otherGear.getAdjective(), getNoun());
+        return new HeadGear(getAttackModifier() + otherGear.getAttackModifier(),
+                getDefenseModifier() + otherGear.getDefenseModifier(),
+                otherGear.getAdjective(),
+                getName());
     }
 }

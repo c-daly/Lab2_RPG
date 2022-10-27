@@ -25,9 +25,9 @@ public class Footwear extends AbstractGear {
             throw new IllegalArgumentException("Gear must be of same type to combine");
         }
 
-        return new Footwear(getAttackModifier(),
-                getDefenseModifier(),
+        return new Footwear(getAttackModifier() + otherGear.getAttackModifier(),
+                getDefenseModifier() + otherGear.getDefenseModifier(),
                 otherGear.getAdjective(),
-                getNoun());
+                getName());
     }
 }

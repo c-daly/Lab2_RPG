@@ -24,6 +24,8 @@ public class HandGear extends AbstractGear {
             throw new IllegalArgumentException("Gear must be of same type to combine");
         }
 
-        return new HandGear(getAttackModifier(), getDefenseModifier(), otherGear.getAdjective(), getNoun());
+        return new HandGear(getAttackModifier() + otherGear.getAttackModifier(),
+                getDefenseModifier() + otherGear.getDefenseModifier(),
+                otherGear.getAdjective(), getName());
     }
 }
