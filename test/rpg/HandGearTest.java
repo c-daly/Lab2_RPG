@@ -5,6 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import rpg.interfaces.IGear;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class HandGearTest {
     private IGear handGear1, handGear2;
 
@@ -17,10 +20,14 @@ public class HandGearTest {
     @Test
     public void combine() {
        IGear combinedHandGear = handGear1.combine(handGear2);
-       Assert.assertEquals(3, combinedHandGear.getAttackModifier());
-       Assert.assertEquals(3, combinedHandGear.getDefenseModifier());
-       Assert.assertEquals(combinedHandGear.getAdjective(), handGear2.getAdjective());
-       Assert.assertEquals(combinedHandGear.getNoun(), handGear1.getName());
-
+       assertEquals(3, combinedHandGear.getAttackModifier());
+       assertEquals(3, combinedHandGear.getDefenseModifier());
+       assertEquals(combinedHandGear.getAdjective(), handGear2.getAdjective());
+       assertEquals(combinedHandGear.getNoun(), handGear1.getName());
+       assertTrue(combinedHandGear instanceof HandGear);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void combineInvokedWithNullGearResultsInException() {
+        handGear1.combine(null);
     }
 }

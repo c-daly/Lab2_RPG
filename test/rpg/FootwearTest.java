@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.Assert;
 import rpg.interfaces.IGear;
 
+import static org.junit.Assert.assertEquals;
+
 public class FootwearTest {
     IGear footwear1, footwear2;
     @Before
@@ -15,9 +17,16 @@ public class FootwearTest {
     @Test
     public void combine() {
        IGear combinedFootwear = footwear1.combine(footwear2);
-       Assert.assertEquals(3, combinedFootwear.getAttackModifier());
-       Assert.assertEquals(3, combinedFootwear.getDefenseModifier());
-       Assert.assertEquals(combinedFootwear.getAdjective(), footwear2.getAdjective());
-       Assert.assertEquals(combinedFootwear.getNoun(), footwear1.getName());
+       assertEquals(3, combinedFootwear.getAttackModifier());
+       assertEquals(3, combinedFootwear.getDefenseModifier());
+       assertEquals(combinedFootwear.getAdjective(), footwear2.getAdjective());
+       assertEquals(combinedFootwear.getNoun(), footwear1.getName());
+       Assert.assertTrue(combinedFootwear instanceof Footwear);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void combineInvokedWithNullGearResultsInException() {
+        footwear1.combine(null);
+    }
+
 }

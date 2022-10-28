@@ -1,5 +1,6 @@
 import rpg.Battle;
 import rpg.Footwear;
+import rpg.HandGear;
 import rpg.Player;
 import rpg.interfaces.IGear;
 
@@ -13,7 +14,9 @@ public class Main {
         Player player2 = new Player(1, 1);
         Battle battle = new Battle(player1, player2, gear);
         IGear footGear = new Footwear(3, 3, "test1", "test2");
-        System.out.println(footGear.getClass());
+        IGear handGear = new HandGear(2, 2, "Awesome", "handgear");
+        gear.add(footGear);
+        gear.add(handGear);
         battle.runBattle();
     }
 

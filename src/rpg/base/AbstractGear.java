@@ -101,4 +101,9 @@ public abstract class AbstractGear implements IGear {
         }
         return this.getClass() == otherGear.getClass();
     }
+
+    @Override
+    public final String toString() {
+        return String.format("%s: Attack Bonus: %d, Defense Bonus: %d\n", getName(), getAttackModifier(), getDefenseModifier());
+    }
 }

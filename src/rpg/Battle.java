@@ -18,7 +18,7 @@ public class Battle {
      * List of instances of IGear representing the available gear
      * for players to equip during the battle.
      */
-    private final List<rpg.interfaces.IGear> gear;
+    private final List<IGear> gear;
 
     /**
      * @param player1 instance of Player that will take first turn.
@@ -43,13 +43,13 @@ public class Battle {
      * Handles the actual battle.  Iterates until gear is gone
      * and determines a winner by invoking finalizeGame().
      */
-    public void runBattle() {
+    public String runBattle() {
         int turn = 0;
-
+        System.out.println("Starting Battle..");
         while (gear.size() > 0) {
             processTurn();
         }
-        finalizeGame();
+        return finalizeGame();
     }
 
     /**
@@ -57,16 +57,16 @@ public class Battle {
      * actions of printing the final battle status and
      * declaring a winner.
      */
-    private void finalizeGame() {
+    private String finalizeGame() {
         printBattleStatus();
-        declareWinner();
+        return declareWinner();
     }
 
     /**
      * Bulk of the work happens here.
      * We print the battle status and check the gear collection, just in case
      * we got here by mistake.  Player1 chooses and equips a piece of gear
-     * and we check again if any is left.  If available, player2 chooses and
+     * and we check again if any is left.  If available, player2 chooses
      * equips a piece of gear.  Finally, when no gear remains, we call the battle.
      */
     private void processTurn() {
@@ -93,7 +93,6 @@ public class Battle {
     }
 
     private List<IGear> sortBy(String sortField) throws Exception {
-        // TODO: This needs to be cleaned up
         Comparator<IGear> comparator = IGear.attackComparator;
         switch (sortField.toLowerCase()) {
             case "attack":
@@ -108,9 +107,10 @@ public class Battle {
      *  Prints descriptive information about the battle state.
      */
     private void printBattleStatus() {
-
-        System.out.println(player1.getPlayerDescription());
-        System.out.println(player2.getPlayerDescription());
+        System.out.println("\nPlayer1 Details:\n===============");
+        System.out.println(player1.toString());
+        System.out.println("\nPlayer2 Details:\n===============");
+        System.out.println(player2.toString());
     }
 
     /**
@@ -125,8 +125,25 @@ public class Battle {
     /**
      * Method prints a string indicating the winner of the battle.
      */
-    private void declareWinner() {
-        System.out.println("There was a winner!");
+    private String declareWinner() {
+        int totalPlayer1Attack = player1.getAttackModifier() + player1.getAttackValue();
+        int totalPlayer2Attack = player2.getAttackModifier() + player2.getAttackValue();
+
+        int totalPlayer1Defense = player1.getDefenseModifier() + player1.getDefenseValue();
+        int totalPlayer2Defense = player2.getDefenseModifier() + player2.getDefenseValue();
+
+        int player1Damage = totalPlayer1Attack - totalPlayer2Defense;
+        int player2Damage = totalPlayer2Attack - totalPlayer1Defense;
+        if(player1Damage > player2Damage) {
+            System.out.println("Player 1 wins the battle!");
+            return "Player1";
+        } else if (player2Damage > player1Damage) {
+            System.out.println("Player 2 wins the battle!");
+            return "Player2";
+        } else {
+            System.out.println("It's a tie!");
+            return "Tie";
+        }
     }
 
 }

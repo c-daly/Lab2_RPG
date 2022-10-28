@@ -20,8 +20,8 @@ public class HeadGear extends AbstractGear {
      */
     @Override
     public IGear combine(IGear otherGear) throws IllegalArgumentException {
-        if (!sameTypeAs(otherGear)) {
-            throw new IllegalArgumentException("Gear must be of same type to combine");
+        if (otherGear == null || !sameTypeAs(otherGear)) {
+            throw new IllegalArgumentException("Gear must be non-null and of same type to combine");
         }
         return new HeadGear(getAttackModifier() + otherGear.getAttackModifier(),
                 getDefenseModifier() + otherGear.getDefenseModifier(),
